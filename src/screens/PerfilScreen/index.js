@@ -18,7 +18,7 @@ export default function PerfilScreen({ navigation, route }) {
         return (
             <View>
                 <Text>Iniciar sesión</Text>
-                <Button title='Iniciar sesión' onPress={() => auth.logIn(true)} />
+                <Button title='Iniciar sesión' onPress={async () => await auth.logIn(true)} />
             </View>
         );
     }

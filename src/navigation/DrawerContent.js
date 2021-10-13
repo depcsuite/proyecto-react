@@ -9,18 +9,17 @@ export default function CustomDrawerContent(props) {
 
     return (
         <DrawerContentScrollView {...props}>
-            <DrawerItemList {...props} />
             <DrawerItem
                 label="Home"
-                onPress={() => { navigation.navigate('HomeStackNavigator'); }}
+                onPress={() => { navigation.navigate('Home'); }}
             />
             <DrawerItem
                 label="Favoritos"
-                onPress={() => { navigation.navigate('FavoritoStackNavigator'); }}
+                onPress={() => { navigation.navigate('Favoritos'); }}
             />
             <DrawerItem
                 label="Perfil"
-                onPress={() => { navigation.navigate('PerfilStackNavigator'); }}
+                onPress={() => { navigation.navigate('Perfil'); }}
             />
         </DrawerContentScrollView>
     );

@@ -2,13 +2,21 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import style from './styles';
 
-export default function DescuentoScreen({ navigation, route }) {
+export default function DescuentoScreen({ navigation, route: { params }, route }) {
 
-    console.log(route);
+    const item = (params != undefined) ? params.item : null;
 
-    return (
-        <View style={style.container}>
-            <Text>Pantalla DESCUENTOS</Text>
-        </View>
-    );
+    if (item != null) {
+        return (
+            <View style={style.container}>
+                <Text>{item.title}</Text>
+            </View>
+        );
+    } else {
+        return (
+            <View style={style.container}>
+                <Text>Descuento no encontrado</Text>
+            </View>
+        );
+    }
 }
