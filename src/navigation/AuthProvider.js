@@ -16,7 +16,15 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const signUp = async (b = false) => {
+    const signUp = async (nombre, apellido, usuario, clave, claveRepetida) => {
+        if (clave != claveRepetida) {
+            return { code: 400, msg: `Las contraseñas deben coincidir.` };
+        } else {
+            return { code: 200, msg: `Usuario ${usuario} registrado con éxito.` };
+        }
+    }
+
+    const logOut = async (b = false) => {
         setIsLoggedIn(b);
         try {
             // await AsyncStorage.removeItem('@isLoggedIn');
@@ -45,7 +53,8 @@ export const AuthProvider = ({ children }) => {
             value={{
                 auth: {
                     logIn,
-                    signUp
+                    signUp,
+                    logOut
                 },
                 user: {
                     isLoggedIn

@@ -44,6 +44,8 @@ export default function HomeScreen({ navigation }) {
         }
     ];
 
+    const MAX_HEIGHT_ITEM = Dimensions.get('screen').height / 7.5;
+
     const renderItem = ({ item }) => (
         <TouchableOpacity
             onPress={() => { navigation.navigate('DescuentoStackNavigator', { item: item }); }}
@@ -53,7 +55,7 @@ export default function HomeScreen({ navigation }) {
                 resizeMode={'cover'}
                 style={{
                     width: Dimensions.get('screen').width / 3,
-                    height: Dimensions.get('screen').height / 7.5,
+                    height: MAX_HEIGHT_ITEM,
                     marginEnd: 20,
                     flex: 1,
                     justifyContent: 'flex-end'
@@ -99,12 +101,19 @@ export default function HomeScreen({ navigation }) {
     return (
         <View style={style.container}>
             <Text>Promociones</Text>
-            <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                horizontal={true}
-                keyExtractor={item => item.id}
-            />
+            <View
+                style={{
+                    flex: 1,
+                    maxHeight: MAX_HEIGHT_ITEM
+                }}
+            >
+                <FlatList
+                    data={DATA}
+                    renderItem={renderItem}
+                    horizontal={true}
+                    keyExtractor={item => item.id}
+                />
+            </View>
         </View>
     );
 }

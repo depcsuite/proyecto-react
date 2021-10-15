@@ -11,14 +11,14 @@ export default function PerfilScreen({ navigation, route }) {
             <View>
                 <Text>Esta es la pantalla del perfil</Text>
                 {user.isLoggedIn ? <Text>Sesión iniciada</Text> : <></>}
-                <Button title='Cerrar sesión' onPress={() => auth.signUp()} />
+                <Button title='Cerrar sesión' onPress={() => auth.logOut()} />
             </View>
         );
     } else {
         return (
             <View>
-                <Text>Iniciar sesión</Text>
-                <Button title='Iniciar sesión' onPress={async () => await auth.logIn(true)} />
+                <Text>No tiene la sesión iniciada.</Text>
+                <Button title='Iniciar sesión' onPress={() => { navigation.navigate('AuthDrawerScreen'); }} />
             </View>
         );
     }
