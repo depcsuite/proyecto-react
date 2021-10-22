@@ -7,12 +7,20 @@ export const AuthProvider = ({ children }) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const [userData, setUserData] = useState({});
+
     const logIn = async (b) => {
-        setIsLoggedIn(b);
         try {
+            setIsLoggedIn(b);
+            setUserData({ id: 1, usuario: 'israShort', nombre: 'Israel', apellido: 'Short' });
+
             await AsyncStorage.setItem('@isLoggedIn', JSON.stringify(b));
+            
+            await AsyncStorage.setItem('@usuario', 'israShort');
+            await AsyncStorage.setItem('@nombre', 'Israel');
+            await AsyncStorage.setItem('@apellido', 'Short');
         } catch (error) {
-            console.error(error);
+            console.warn(error);
         }
     }
 
@@ -31,7 +39,7 @@ export const AuthProvider = ({ children }) => {
             let keys = ['@isLoggedIn'];
             await AsyncStorage.multiRemove(keys);
         } catch (error) {
-            console.error(error);
+            console.warn(error);
         }
     }
 
@@ -43,7 +51,7 @@ export const AuthProvider = ({ children }) => {
                     setIsLoggedIn(value);
                 }
             } catch (error) {
-                console.error(error);
+                console.warn(error);
             }
         })();
     }, []);
@@ -57,7 +65,8 @@ export const AuthProvider = ({ children }) => {
                     logOut
                 },
                 user: {
-                    isLoggedIn
+                    isLoggedIn,
+                    userData
                 }
             }}
         >
