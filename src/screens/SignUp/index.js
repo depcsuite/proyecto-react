@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
 import { Icon, Input } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import InputForm from '../../components/InputForm';
 import { AuthContext } from '../../navigation/AuthProvider';
 import style from './styles';
 
@@ -16,25 +17,80 @@ export default function SignUpScreen({ navigation, route }) {
     const [clave, setClave] = useState('');
     const [claveRepetida, setClaveRepetida] = useState('');
 
-    const [msgAlertView, setMsgAlertView] = useState(false);
-    const [msgAlert, setMsgAlert] = useState('');
+    const [textVisible, setTextVisible] = useState(false);
+    const [textVisibleR, setTextVisibleR] = useState(false);
+
+    const [labelNombreVisible, setLabelNombreVisible] = useState(false);
+    const [labelUsuarioVisible, setLabelUsuarioVisible] = useState(false);
+    const [labelClaveVisible, setLabelClaveVisible] = useState(false);
+    const [labelClaveRVisible, setLabelClaveRVisible] = useState(false);
 
     const signUp = async () => {
         if (nombre != '' && usuario != '' && clave != '' && claveRepetida != '') {
             const result = await auth.signUp(nombre, apellido, usuario, clave, claveRepetida);
-            if (result.code == 210) {
+            if (result.code == 200) {
                 setNombre('');
                 setApellido('');
                 setUsuario('');
                 setClave('');
                 setClaveRepetida('');
             } else {
-                setMsgAlertView(true);
+                alert('Debe completar los campos obligatorios');
             }
         } else {
-            setMsgAlertView(true);
-            // alert('Debe completar los campos obligatorios');
+            setLabelNombreVisible(true);
+            setLabelUsuarioVisible(true);
+            setLabelClaveVisible(true);
+            setLabelClaveRVisible(true);
         }
+    }
+
+    const handleNombre = (e) => {
+        if (labelNombreVisible) {
+            if (e != '') {
+                setLabelNombreVisible(false);
+            }
+        }
+        setNombre(e);
+    }
+
+    const handleApellido = (e) => {
+        setApellido(e);
+    }
+
+    const handleUsuario = (e) => {
+        if (labelUsuarioVisible) {
+            if (e != '') {
+                setLabelUsuarioVisible(false);
+            }
+        }
+        setUsuario(e);
+    }
+
+    const handleClave = (e) => {
+        if (labelClaveVisible) {
+            if (e != '') {
+                setLabelClaveVisible(false);
+            }
+        }
+        setClave(e);
+    }
+
+    const handleClaveR = (e) => {
+        if (labelClaveRVisible) {
+            if (e != '') {
+                setLabelClaveRVisible(false);
+            }
+        }
+        setClaveRepetida(e);
+    }
+
+    const handleVisibility = () => {
+        setTextVisible(prevValue => !prevValue);
+    }
+
+    const handleVisibilityR = () => {
+        setTextVisibleR(prevValue => !prevValue);
     }
 
     return (
@@ -51,55 +107,53 @@ export default function SignUpScreen({ navigation, route }) {
             <View style={style.mainContainer}>
                 <View style={style.containerRow}>
                     <View style={style.inputRow}>
-                        <Input
+                        <InputForm
                             value={nombre}
-                            label='Nombre *'
-                            onChangeText={text => setNombre(text)}
+                            label={'Nombre *'}
+                            handleChangeText={handleNombre}
+                            errorVisible={labelNombreVisible}
+                            textAlign={'center'}
                         />
-                        <Text style={{ display: msgAlertView ? 'flex' : 'none' }}>El nombre debe ser obligatorio</Text>
                     </View>
                     <View style={style.inputRow}>
-                        <Input
+                        <InputForm
                             value={apellido}
-                            label='Apellido'
-                            onChangeText={text => setApellido(text)}
+                            label={'Apellido'}
+                            handleChangeText={handleApellido}
                         />
                     </View>
                 </View>
-                <Input
+
+                <InputForm
                     value={usuario}
-                    label='Usuario *'
-                    onChangeText={text => setUsuario(text)}
+                    label={'Usuario *'}
+                    handleChangeText={handleUsuario}
+                    textAlign={'left'}
+                    errorVisible={labelUsuarioVisible}
                 />
-                <Text style={{ display: msgAlertView ? 'flex' : 'none' }}>El usuario debe ser obligatorio</Text>
-                <Input
+
+                <InputForm
                     value={clave}
-                    label='Contraseña *'
-                    secureTextEntry={true}
-                    rightIcon={
-                        <Icon
-                            type='material-community'
-                            name='eye'
-                            color='black'
-                        />
-                    }
-                    onChangeText={text => setClave(text)}
+                    label={'Contraseña *'}
+                    handleChangeText={handleClave}
+                    textAlign={'left'}
+                    errorVisible={labelClaveVisible}
+                    icon={textVisible ? 'eye-off' : 'eye'}
+                    secureTextEntry={!textVisible}
+                    changeTextVisibility={handleVisibility}
                 />
-                <Text style={{ display: msgAlertView ? 'flex' : 'none' }}>La contraseña debe ser obligatorio</Text>
-                <Input
+
+                <InputForm
                     value={claveRepetida}
-                    label='Repetir contraseña *'
-                    secureTextEntry={true}
-                    rightIcon={
-                        <Icon
-                            type='material-community'
-                            name='eye'
-                            color='black'
-                        />
-                    }
-                    onChangeText={text => setClaveRepetida(text)}
+                    label={'Repetir contraseña *'}
+                    handleChangeText={handleClaveR}
+                    textAlign={'left'}
+                    errorVisible={labelClaveRVisible}
+                    icon={textVisibleR ? 'eye-off' : 'eye'}
+                    secureTextEntry={!textVisibleR}
+                    changeTextVisibility={handleVisibilityR}
                 />
-                <Text style={{ display: msgAlertView ? 'flex' : 'none' }}>La contraseña debe ser obligatorio</Text>
+
             </View>
             <View style={style.mainContainer}>
                 <Button
