@@ -15,7 +15,8 @@ export const AuthProvider = ({ children }) => {
             setUserData({ id: 1, usuario: 'israShort', nombre: 'Israel', apellido: 'Short' });
 
             await AsyncStorage.setItem('@isLoggedIn', JSON.stringify(b));
-            
+
+            await AsyncStorage.setItem('@id', JSON.stringify(1));
             await AsyncStorage.setItem('@usuario', 'israShort');
             await AsyncStorage.setItem('@nombre', 'Israel');
             await AsyncStorage.setItem('@apellido', 'Short');
@@ -47,8 +48,13 @@ export const AuthProvider = ({ children }) => {
         (async () => {
             try {
                 const value = await AsyncStorage.getItem('@isLoggedIn');
+                const idUsuario = await AsyncStorage.getItem('@id');
+                const usuario = await AsyncStorage.getItem('@usuario');
+                const nombre = await AsyncStorage.getItem('@nombre');
+                const apellido = await AsyncStorage.getItem('@apellido');
                 if (value != null) {
                     setIsLoggedIn(value);
+                    setUserData({ id: JSON.parse(idUsuario), usuario: usuario, nombre: nombre, apellido: apellido });
                 }
             } catch (error) {
                 console.warn(error);
