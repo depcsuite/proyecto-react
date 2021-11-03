@@ -1,51 +1,67 @@
-import React, { useState } from 'react';
-import { Button, FlatList, Text } from 'react-native';
-
-import EventSource from 'react-native-sse';
+import React, { useState, useContext, useEffect } from 'react';
+import { Text, View, FlatList, Dimensions, Button } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { AuthContext } from '../../navigation/AuthProvider';
 
 export default function CarritoScreen() {
 
-    // const [dataPedidos, setDataPedidos] = useState(null);
+    const { data, actions } = useContext(AuthContext);
 
-    // const es = new EventSource('https://nelsontarche.com.ar/api/rest/actions.php?do=obtenerEstado');
+    const [total, setTotal] = useState(0);
 
-    // es.addEventListener('open', (event) => {
-    //     console.log('Open SSE connection.', event);
-    // });
+    useEffect(() => {
+        let cant = 0;
+        data.carrito.forEach(function (item) {
+            cant += item.total;
+        });
+        setTotal(cant);
+    }, [data.carrito]);
 
-    // es.addEventListener('message', (event) => {
-    //     let data = JSON.parse(event.data);
-    //     console.log(data);
-    //     setDataPedidos(data);
-    // });
-
-    // es.addEventListener('error', (event) => {
-    //     if (event.type === 'error') {
-    //         console.error('Connection error:', event.message);
-    //     } else if (event.type === 'exception') {
-    //         console.error('Error:', event.message, event.error);
-    //     }
-    // });
-
-    // es.addEventListener('close', (event) => {
-    //     console.log('Close SSE connection.');
-    // });
-
-    // const renderItem = ({ item }) => {
-    //     return (
-    //         <Text>{JSON.stringify(item)}</Text>
-    //     );
-    // }
+    const renderItem = ({ item }) => {
+        return (
+            <View style={{ backgroundColor: '#EDEDED', marginBottom: 15, marginHorizontal: 15, padding: 15, flexDirection: 'row', justifyContent: 'space-between', borderRadius: 12 }}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingEnd: 30 }}>
+                    <Text style={{ fontSize: 17 }}>{item.nombre}</Text>
+                    <Text style={{ fontSize: 15 }}>Cant: {item.cantidad}</Text>
+                </View>
+                <IconButton
+                    icon={'close'}
+                    size={25}
+                    color={'#000'}
+                    onPress={() => {
+                        actions.removeCarrito(item.id);
+                    }}
+                />
+            </View>
+        );
+    }
 
     return (
-        <>
-            <Text>Esta es la pantalla del carrito. Hola!!!</Text>
-            {/* <Button title='Cerrar' onPress={() => { es.close() }} /> */}
-            {/* <FlatList
-                data={dataPedidos}
-                renderItem={renderItem}
-                keyExtractor={item => new Date().getMilliseconds()}
-            /> */}
-        </>
+        <FlatList
+            data={data.carrito}
+            renderItem={renderItem}
+            keyExtractor={item => `${item.id}`}
+            horizontal={false}
+            ListEmptyComponent={
+                <View style={{ alignItems: 'center', width: Dimensions.get('screen').width, height: Dimensions.get('screen').height }}>
+                    <Text>No hay productos agregados al carrito.</Text>
+                </View>
+            }
+            ListFooterComponent={
+                <View style={{ width: Dimensions.get('screen').width, alignItems: 'center' }}>
+                    <Text style={{ marginVertical: 20, fontSize: 17 }}>Total {total}</Text>
+                    <Button
+                        title={'Registrar pedido'}
+                        onPress={() => {
+                            actions.registrarPedido();
+                        }}
+                    />
+                </View>
+            }
+            style={{
+                backgroundColor: 'white',
+                paddingTop: 20
+            }}
+        />
     );
 }

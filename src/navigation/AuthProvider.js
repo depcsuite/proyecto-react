@@ -67,6 +67,20 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const removeCarrito = (id) => {
+        let carritoAux = [];
+        carrito.forEach(function (item) {
+            if (!(item.id == id)) {
+                carritoAux.push(item);
+            }
+        });
+        setCarrito(carritoAux);
+    }
+
+    const registrarPedido = () => {
+        console.log(carrito);
+    }
+
     useEffect(() => {
         (async () => {
             try {
@@ -103,7 +117,9 @@ export const AuthProvider = ({ children }) => {
                     carrito
                 },
                 actions: {
-                    addCarrito
+                    addCarrito,
+                    removeCarrito,
+                    registrarPedido
                 }
             }}
         >

@@ -88,21 +88,24 @@ export default function HomeScreen({ navigation }) {
                     nombre: 'Hamburguesa clásica',
                     descripcion: 'Hamburguesa clásica hecha con tomate, lechuga y cebolla caramelizada',
                     precio: 560,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png'
+                    imagenDetalle: 'https://reactjs.org/logo-og.png',
+                    fkIdRubro: 1
                 },
                 {
                     id: 2,
                     nombre: 'Hamburguesa clásica 2',
                     descripcion: 'Hamburguesa clásica 2',
                     precio: 620,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png'
+                    imagenDetalle: 'https://reactjs.org/logo-og.png',
+                    fkIdRubro: 1
                 },
                 {
                     id: 3,
                     nombre: 'Hamburguesa clásica 3',
                     descripcion: 'Hamburguesa clásica 3',
                     precio: 250,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png'
+                    imagenDetalle: 'https://reactjs.org/logo-og.png',
+                    fkIdRubro: 1
                 }
             ]
         },
@@ -115,7 +118,8 @@ export default function HomeScreen({ navigation }) {
                     nombre: 'Taco 1',
                     descripcion: 'Taco 1',
                     precio: 400,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png'
+                    imagenDetalle: 'https://reactjs.org/logo-og.png',
+                    fkIdRubro: 2
                 }
             ]
         }
@@ -213,28 +217,30 @@ export default function HomeScreen({ navigation }) {
     }
 
     return (
-        <ScrollView>
-            <Text style={{ fontSize: 23 }}>Promociones</Text>
-            <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                horizontal={true}
-                keyExtractor={item => item.id}
-            />
-            <Text style={{ fontSize: 23 }}>Ofertas</Text>
-            <FlatList
-                data={DATA_OFERTAS}
-                renderItem={renderItemOfertas}
-                horizontal={true}
-                keyExtractor={item => `${item.id}`}
-            />
-            <Text style={{ fontSize: 23 }}>Productos</Text>
-            <FlatList
-                data={PRODUCTOS}
-                renderItem={renderItemProductos}
-                horizontal={false}
-                keyExtractor={item => `${item.idRubro}`}
-            />
-        </ScrollView>
+        <FlatList
+            data={PRODUCTOS}
+            ListHeaderComponent={
+                <>
+                    <Text style={{ fontSize: 23 }}>Promociones</Text>
+                    <FlatList
+                        data={DATA}
+                        renderItem={renderItem}
+                        horizontal={true}
+                        keyExtractor={item => item.id}
+                    />
+                    <Text style={{ fontSize: 23 }}>Ofertas</Text>
+                    <FlatList
+                        data={DATA_OFERTAS}
+                        renderItem={renderItemOfertas}
+                        horizontal={true}
+                        keyExtractor={item => `${item.id}`}
+                    />
+                    <Text style={{ fontSize: 23 }}>Productos</Text>
+                </>
+            }
+            renderItem={renderItemProductos}
+            horizontal={false}
+            keyExtractor={item => `${item.idRubro}`}
+        />
     );
 }

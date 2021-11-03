@@ -35,7 +35,7 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
 
     const agregarCarrito = () => {
         let productData = {
-            id: item.id,
+            id: `${item.id}${item.fkIdRubro}`,
             nombre: item.nombre,
             precio: item.precio,
             cantidad: cantPedido,
