@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const [userData, setUserData] = useState({});
+    const [carrito, setCarrito] = useState([]);
 
     const logIn = async (b) => {
         try {
@@ -37,10 +38,32 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(b);
         try {
             // await AsyncStorage.removeItem('@isLoggedIn');
-            let keys = ['@isLoggedIn'];
+            let keys = ['@isLoggedIn', '@id', '@usuario', '@nombre', '@apellido'];
             await AsyncStorage.multiRemove(keys);
         } catch (error) {
             console.warn(error);
+        }
+    }
+
+    const addCarrito = (item) => {
+        if (item.cantidad == 0) { } else {
+            let encontrado = false;
+            carrito.forEach(function (value, index) {
+                if (item.id == value.id) {
+                    encontrado = true;
+                    carrito[index] = {
+                        id: value.id,
+                        nombre: value.nombre,
+                        precio: value.precio,
+                        cantidad: item.cantidad,
+                        total: item.cantidad * item.precio
+                    }
+                }
+            });
+            if (!encontrado) {
+                carrito.push(item);
+            }
+            setCarrito(carrito);
         }
     }
 
@@ -48,10 +71,12 @@ export const AuthProvider = ({ children }) => {
         (async () => {
             try {
                 const value = await AsyncStorage.getItem('@isLoggedIn');
+
                 const idUsuario = await AsyncStorage.getItem('@id');
                 const usuario = await AsyncStorage.getItem('@usuario');
                 const nombre = await AsyncStorage.getItem('@nombre');
                 const apellido = await AsyncStorage.getItem('@apellido');
+
                 if (value != null) {
                     setIsLoggedIn(value);
                     setUserData({ id: JSON.parse(idUsuario), usuario: usuario, nombre: nombre, apellido: apellido });
@@ -73,6 +98,12 @@ export const AuthProvider = ({ children }) => {
                 user: {
                     isLoggedIn,
                     userData
+                },
+                data: {
+                    carrito
+                },
+                actions: {
+                    addCarrito
                 }
             }}
         >
