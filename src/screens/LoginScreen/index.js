@@ -21,10 +21,8 @@ export default function LoginScreen({ navigation, route }) {
             alert('Usuario y clave obligatorios');
         } else {
             setLoading(true);
-            setTimeout(async function () {
-                await auth.logIn(true);
-                setLoading(false);
-            }, 2000);
+            await auth.logIn({ user: usuario, password: clave });
+            setLoading(false);
         }
     }
 

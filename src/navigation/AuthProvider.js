@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Service from '../services';
 
 export const AuthContext = createContext({});
 
@@ -12,15 +13,23 @@ export const AuthProvider = ({ children }) => {
 
     const logIn = async (b) => {
         try {
-            setIsLoggedIn(b);
-            setUserData({ id: 1, usuario: 'israShort', nombre: 'Israel', apellido: 'Short' });
-
-            await AsyncStorage.setItem('@isLoggedIn', JSON.stringify(b));
-
-            await AsyncStorage.setItem('@id', JSON.stringify(1));
-            await AsyncStorage.setItem('@usuario', 'israShort');
-            await AsyncStorage.setItem('@nombre', 'Israel');
-            await AsyncStorage.setItem('@apellido', 'Short');
+            const result = await Service.logIn(b.user, b.password);
+            if (result.status == 200) {
+                const { data } = result;
+                if (data.code == 200) {
+                    setIsLoggedIn(true);
+                    setUserData({ id: 1, usuario: 'israShort', nombre: 'Israel', apellido: 'Short' });
+                    await AsyncStorage.setItem('@isLoggedIn', JSON.stringify(true));
+                    await AsyncStorage.setItem('@id', JSON.stringify(1));
+                    await AsyncStorage.setItem('@usuario', 'israShort');
+                    await AsyncStorage.setItem('@nombre', 'Israel');
+                    await AsyncStorage.setItem('@apellido', 'Short');
+                } else if (data.code == 400) {
+                    console.warn(result.data.msg);
+                }
+            } else {
+                console.warn(result.statusText);
+            }
         } catch (error) {
             console.warn(error);
         }
