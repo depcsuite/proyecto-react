@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image } from 'react-native';
+import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { AuthContext } from '../../navigation/AuthProvider';
 import style from './styles';
 
@@ -11,6 +11,7 @@ export default function HomeScreen({ navigation }) {
 
     const { data, actions } = useContext(AuthContext);
 
+    const [loading, setLoading] = useState(true);
     const [promocionesData, setPromocionesData] = useState(null);
     const [ofertasData, setOfertasData] = useState(null);
     const [productosData, setProductosData] = useState(null);
@@ -19,6 +20,7 @@ export default function HomeScreen({ navigation }) {
 
     useEffect(() => {
         (async () => {
+            setLoading(true);
             let result = await actions.getPromociones();
             if (result == null) {
                 console.warn('No se encontraron promociones.');
@@ -39,6 +41,7 @@ export default function HomeScreen({ navigation }) {
             } else {
                 setProductosData(result);
             }
+            setLoading(false);
         })();
     }, []);
 
@@ -131,40 +134,48 @@ export default function HomeScreen({ navigation }) {
         );
     }
 
-    return (
-        <FlatList
-            data={productosData}
-            ListHeaderComponent={
-                <>
-                    <Text style={{ fontSize: 23 }}>Promociones</Text>
-                    <FlatList
-                        data={promocionesData}
-                        renderItem={renderItem}
-                        horizontal={true}
-                        keyExtractor={item => `${item.id}`}
-                        ListEmptyComponent={
-                            <Text>No se encontraron promociones.</Text>
-                        }
-                    />
-                    <Text style={{ fontSize: 23 }}>Ofertas</Text>
-                    <FlatList
-                        data={ofertasData}
-                        renderItem={renderItemOfertas}
-                        horizontal={true}
-                        keyExtractor={item => `${item.id}`}
-                        ListEmptyComponent={
-                            <Text>No se encontraron ofertas.</Text>
-                        }
-                    />
-                    <Text style={{ fontSize: 23 }}>Productos</Text>
-                </>
-            }
-            renderItem={renderItemProductos}
-            horizontal={false}
-            keyExtractor={item => `${item.idRubro}`}
-            ListEmptyComponent={
-                <Text>No se encontraron productos.</Text>
-            }
-        />
-    );
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+                <ActivityIndicator size={'large'} color={'black'} />
+            </View>
+        );
+    } else {
+        return (
+            <FlatList
+                data={productosData}
+                ListHeaderComponent={
+                    <>
+                        <Text style={{ fontSize: 23 }}>Promociones</Text>
+                        <FlatList
+                            data={promocionesData}
+                            renderItem={renderItem}
+                            horizontal={true}
+                            keyExtractor={item => `${item.id}`}
+                            ListEmptyComponent={
+                                <Text>No se encontraron promociones.</Text>
+                            }
+                        />
+                        <Text style={{ fontSize: 23 }}>Ofertas</Text>
+                        <FlatList
+                            data={ofertasData}
+                            renderItem={renderItemOfertas}
+                            horizontal={true}
+                            keyExtractor={item => `${item.id}`}
+                            ListEmptyComponent={
+                                <Text>No se encontraron ofertas.</Text>
+                            }
+                        />
+                        <Text style={{ fontSize: 23 }}>Productos</Text>
+                    </>
+                }
+                renderItem={renderItemProductos}
+                horizontal={false}
+                keyExtractor={item => `${item.idRubro}`}
+                ListEmptyComponent={
+                    <Text>No se encontraron productos.</Text>
+                }
+            />
+        );
+    }
 }
