@@ -46,3 +46,20 @@ export const obtenerProductos = async () => Service('/actions.php', {
     }
 });
 
+export const setFavorito = async (id, user) => Service('/actions.php', {
+    method: 'POST',
+    params: {
+        do: 'setFavorito',
+        id: id,
+        user: user
+    }
+});
+
+export const removeFavorito = async (id, user) => Service('/actions.php', {
+    method: 'POST',
+    params: {
+        do: 'removeFavorito',
+        id: id,
+        user: user
+    }
+});

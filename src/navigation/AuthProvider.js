@@ -141,6 +141,22 @@ export const AuthProvider = ({ children }) => {
         setCarrito(carritoAux);
     }
 
+    const agregarFavorito = async (id) => {
+        const result = await Service.setFavorito(id, userData.usuario);
+        if (result.status == 200) {
+            return result.data.code;
+        }
+        return null;
+    }
+
+    const eliminarFavorito = async (id) => {
+        const result = await Service.removeFavorito(id, userData.usuario);
+        if (result.status == 200) {
+            return result.data.code;
+        }
+        return null;
+    }
+
     const registrarPedido = () => {
         // console.log(carrito);
     }
@@ -189,7 +205,9 @@ export const AuthProvider = ({ children }) => {
                     registrarPedido,
                     getPromociones,
                     getOfertas,
-                    getProductos
+                    getProductos,
+                    agregarFavorito,
+                    eliminarFavorito
                 }
             }}
         >

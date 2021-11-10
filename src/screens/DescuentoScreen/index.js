@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { Title } from 'react-native-paper';
+import { IconButton, Title } from 'react-native-paper';
 import InputCantidad from '../../components/InputCantidad';
 import style from './styles';
 import { Icon } from 'react-native-elements';
@@ -17,8 +17,9 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
     const { actions, data } = useContext(AuthContext);
 
     const [cantPedido, setCantPedido] = useState(0);
+    const [favorito, setFavorito] = useState(false);
 
-    useState(() => {
+    useEffect(() => {
         data.carrito.forEach(function (value) {
             if (value.id == item.id) {
                 setCantPedido(parseInt(value.cantidad));
@@ -45,6 +46,22 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
         actions.addCarrito(productData);
     }
 
+    const handleFavorito = async () => {
+        try {
+            let result = await actions.agregarFavorito(item.id);
+            if (result != null) {
+                if (result == 400) {
+                    result = await actions.eliminarFavorito(item.id);
+                    setFavorito(false);
+                } else {
+                    setFavorito(true);
+                }
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+
     if (item != null) {
         return (
             <View style={style.container}>
@@ -53,6 +70,20 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
                     style={{
                         width: width,
                         height: 250,
+                        zIndex: 0
+                    }}
+                />
+                <IconButton
+                    icon={favorito ? 'heart' : 'heart-outline'}
+                    size={26}
+                    color={'#000'}
+                    onPress={async () => {
+                        await handleFavorito();
+                    }}
+                    style={{
+                        alignSelf: 'flex-end',
+                        marginEnd: 20,
+                        marginVertical: 20
                     }}
                 />
                 <View style={{ paddingHorizontal: 10 }}>
