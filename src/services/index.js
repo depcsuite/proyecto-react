@@ -15,10 +15,34 @@ export const logIn = async (usuario, clave) => Service('/login.php', {
     }
 });
 
-export const getFavoritos = async (usuario) => Service('/actions.php', {
-    method: 'GET',
+export const signUp = async (usuario, clave, nombre, apellido) => Service('/signup.php', {
+    method: 'POST',
     params: {
-        do: 'getFavoritos',
-        user: usuario
+        user: usuario,
+        password: clave,
+        name: nombre,
+        lastName: apellido
     }
 });
+
+export const obtenerPromociones = async () => Service('/actions.php', {
+    method: 'GET',
+    params: {
+        do: 'getPromociones'
+    }
+});
+
+export const obtenerOfertas = async () => Service('/actions.php', {
+    method: 'GET',
+    params: {
+        do: 'getDestacados'
+    }
+});
+
+export const obtenerProductos = async () => Service('/actions.php', {
+    method: 'GET',
+    params: {
+        do: 'getProductos'
+    }
+});
+

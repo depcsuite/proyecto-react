@@ -11,6 +11,10 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState({});
     const [carrito, setCarrito] = useState([]);
 
+    const [promociones, setPromociones] = useState([]);
+    const [ofertas, setOfertas] = useState([]);
+    const [productos, setProductos] = useState([]);
+
     const logIn = async (b) => {
         try {
             const result = await Service.logIn(b.user, b.password);
@@ -18,12 +22,13 @@ export const AuthProvider = ({ children }) => {
                 const { data } = result;
                 if (data.code == 200) {
                     setIsLoggedIn(true);
-                    setUserData({ id: 1, usuario: 'israShort', nombre: 'Israel', apellido: 'Short' });
+                    const { user } = data;
+                    setUserData({ id: 1, usuario: user.user, nombre: user.nombre, apellido: user.apellido });
                     await AsyncStorage.setItem('@isLoggedIn', JSON.stringify(true));
                     await AsyncStorage.setItem('@id', JSON.stringify(1));
-                    await AsyncStorage.setItem('@usuario', 'israShort');
-                    await AsyncStorage.setItem('@nombre', 'Israel');
-                    await AsyncStorage.setItem('@apellido', 'Short');
+                    await AsyncStorage.setItem('@usuario', user.user);
+                    await AsyncStorage.setItem('@nombre', user.nombre);
+                    await AsyncStorage.setItem('@apellido', user.apellido);
                 } else if (data.code == 400) {
                     console.warn(result.data.msg);
                 }
@@ -37,9 +42,14 @@ export const AuthProvider = ({ children }) => {
 
     const signUp = async (nombre, apellido, usuario, clave, claveRepetida) => {
         if (clave != claveRepetida) {
-            return { code: 400, msg: `Las contraseñas deben coincidir.` };
+            return { code: 400, msg: 'Las contraseñas deben coincidir.' };
         } else {
-            return { code: 200, msg: `Usuario ${usuario} registrado con éxito.` };
+            const result = await Service.signUp(usuario, clave, nombre, apellido);
+            if (result.status == 200) {
+                return result.data;
+            } else {
+                return { code: 500, msg: 'Error del servidor' };
+            }
         }
     }
 
@@ -52,6 +62,51 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.warn(error);
         }
+    }
+
+    const getPromociones = async () => {
+        try {
+            const result = await Service.obtenerPromociones();
+            if (result.status == 200) {
+                const { data } = result;
+                if (data.code == 200) {
+                    return data.body;
+                }
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+        return null;
+    }
+
+    const getOfertas = async () => {
+        try {
+            const result = await Service.obtenerOfertas();
+            if (result.status == 200) {
+                const { data } = result;
+                if (data.code == 200) {
+                    return data.body;
+                }
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+        return null;
+    }
+
+    const getProductos = async () => {
+        try {
+            const result = await Service.obtenerProductos();
+            if (result.status == 200) {
+                const { data } = result;
+                if (data.code == 200) {
+                    return data.body;
+                }
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+        return null;
     }
 
     const addCarrito = (item) => {
@@ -87,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const registrarPedido = () => {
-        console.log(carrito);
+        // console.log(carrito);
     }
 
     useEffect(() => {
@@ -123,12 +178,18 @@ export const AuthProvider = ({ children }) => {
                     userData
                 },
                 data: {
-                    carrito
+                    carrito,
+                    promociones,
+                    ofertas,
+                    productos
                 },
                 actions: {
                     addCarrito,
                     removeCarrito,
-                    registrarPedido
+                    registrarPedido,
+                    getPromociones,
+                    getOfertas,
+                    getProductos
                 }
             }}
         >

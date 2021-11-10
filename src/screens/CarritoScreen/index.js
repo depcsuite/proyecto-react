@@ -43,20 +43,23 @@ export default function CarritoScreen() {
             keyExtractor={item => `${item.id}`}
             horizontal={false}
             ListEmptyComponent={
-                <View style={{ alignItems: 'center', width: Dimensions.get('screen').width, height: Dimensions.get('screen').height }}>
+                <View style={{ alignItems: 'center' }}>
                     <Text>No hay productos agregados al carrito.</Text>
                 </View>
             }
             ListFooterComponent={
-                <View style={{ width: Dimensions.get('screen').width, alignItems: 'center' }}>
-                    <Text style={{ marginVertical: 20, fontSize: 17 }}>Total {total}</Text>
-                    <Button
-                        title={'Registrar pedido'}
-                        onPress={() => {
-                            actions.registrarPedido();
-                        }}
-                    />
-                </View>
+                data.carrito.length == 0 ?
+                    <></>
+                    :
+                    <View style={{ width: Dimensions.get('screen').width, alignItems: 'center' }}>
+                        <Text style={{ marginVertical: 20, fontSize: 17 }}>Total {total}</Text>
+                        <Button
+                            title={'Registrar pedido'}
+                            onPress={() => {
+                                actions.registrarPedido();
+                            }}
+                        />
+                    </View>
             }
             style={{
                 backgroundColor: 'white',

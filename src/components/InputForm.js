@@ -6,7 +6,7 @@ export default function InputForm(props) {
 
     const errorVisible = props.errorVisible != undefined ? props.errorVisible : false;
 
-    useEffect(() => { console.log(props.label); }, []);
+    useEffect(() => { /* console.log(props.label); */ }, []);
 
     return (
         <View style={style.mainContainer}>

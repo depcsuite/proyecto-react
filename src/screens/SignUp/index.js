@@ -34,8 +34,9 @@ export default function SignUpScreen({ navigation, route }) {
                 setUsuario('');
                 setClave('');
                 setClaveRepetida('');
+                navigation.navigate('AuthStackLoginScreen');
             } else {
-                alert('Debe completar los campos obligatorios');
+                alert(result.msg);
             }
         } else {
             setLabelNombreVisible(true);

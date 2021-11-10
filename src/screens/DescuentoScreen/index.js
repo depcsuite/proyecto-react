@@ -6,6 +6,7 @@ import InputCantidad from '../../components/InputCantidad';
 import style from './styles';
 import { Icon } from 'react-native-elements';
 import { AuthContext } from '../../navigation/AuthProvider';
+import { NO_IMAGE, REST_BASE_IMAGES } from '../../config/constants';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -42,14 +43,13 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
             total: cantPedido * item.precio
         };
         actions.addCarrito(productData);
-        console.log(data.carrito);
     }
 
     if (item != null) {
         return (
             <View style={style.container}>
                 <Image
-                    source={{ uri: item.imagenDetalle }}
+                    source={{ uri: item.imagenDetalle != '' ? `${REST_BASE_IMAGES}${item.imagenDetalle}` : `${REST_BASE_IMAGES}${NO_IMAGE}` }}
                     style={{
                         width: width,
                         height: 250,

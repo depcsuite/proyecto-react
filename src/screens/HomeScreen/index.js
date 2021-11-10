@@ -1,131 +1,46 @@
-import React, { useState } from 'react';
-import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image } from 'react-native';
+import { AuthContext } from '../../navigation/AuthProvider';
 import style from './styles';
+
+const { REST_BASE_IMAGES, NO_IMAGE } = require('../../config/constants');
 
 export default function HomeScreen({ navigation }) {
 
     const image = { uri: "https://reactjs.org/logo-og.png" };
 
+    const { data, actions } = useContext(AuthContext);
+
     const [promocionesData, setPromocionesData] = useState(null);
     const [ofertasData, setOfertasData] = useState(null);
-
-    const DATA = [
-        {
-            id: '1a',
-            title: 'Promocion 1',
-            aclaracion: 'Aclaración de la promoción 1'
-        },
-        {
-            id: '2b',
-            title: 'Promocion 2',
-            aclaracion: 'Aclaración de la promoción 2'
-        },
-        {
-            id: '3c',
-            title: 'Promocion 3',
-            aclaracion: 'Aclaración de la promoción 3'
-        },
-        {
-            id: '4d',
-            title: 'Promocion 4',
-            aclaracion: 'Aclaración de la promoción 4'
-        },
-        {
-            id: '5e',
-            title: 'Promocion 5',
-            aclaracion: 'Aclaración de la promoción 5'
-        },
-        {
-            id: '6e',
-            title: 'Promocion 6',
-            aclaracion: 'Aclaración de la promoción 5'
-        },
-        {
-            id: '7e',
-            title: 'Promocion 7',
-            aclaracion: 'Aclaración de la promoción 5'
-        }
-    ];
-
-    const DATA_OFERTAS = [
-        {
-            id: 1,
-            nombre: 'Producto 1',
-            aclaracion: 'Aclaracion 1',
-            precioOferta: 300,
-            precioProducto: 450
-        },
-        {
-            id: 2,
-            nombre: 'Producto 2',
-            aclaracion: 'Aclaracion 2',
-            precioOferta: 320,
-            precioProducto: 560
-        },
-        {
-            id: 3,
-            nombre: 'Producto 3',
-            aclaracion: 'Aclaracion 3',
-            precioOferta: null,
-            precioProducto: 400
-        },
-        {
-            id: 4,
-            nombre: 'Producto 4',
-            aclaracion: 'Aclaracion 4',
-            precioOferta: 320,
-            precioProducto: 560
-        },
-    ];
-
-    const PRODUCTOS = [
-        {
-            idRubro: 1,
-            rubro: 'Hamburguesas',
-            productos: [
-                {
-                    id: 1,
-                    nombre: 'Hamburguesa clásica',
-                    descripcion: 'Hamburguesa clásica hecha con tomate, lechuga y cebolla caramelizada',
-                    precio: 560,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png',
-                    fkIdRubro: 1
-                },
-                {
-                    id: 2,
-                    nombre: 'Hamburguesa clásica 2',
-                    descripcion: 'Hamburguesa clásica 2',
-                    precio: 620,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png',
-                    fkIdRubro: 1
-                },
-                {
-                    id: 3,
-                    nombre: 'Hamburguesa clásica 3',
-                    descripcion: 'Hamburguesa clásica 3',
-                    precio: 250,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png',
-                    fkIdRubro: 1
-                }
-            ]
-        },
-        {
-            idRubro: 2,
-            rubro: 'Tacos',
-            productos: [
-                {
-                    id: 1,
-                    nombre: 'Taco 1',
-                    descripcion: 'Taco 1',
-                    precio: 400,
-                    imagenDetalle: 'https://reactjs.org/logo-og.png',
-                    fkIdRubro: 2
-                }
-            ]
-        }
-    ];
+    const [productosData, setProductosData] = useState(null);
 
     const MAX_HEIGHT_ITEM = Dimensions.get('screen').height / 7.5;
+
+    useEffect(() => {
+        (async () => {
+            let result = await actions.getPromociones();
+            if (result == null) {
+                console.warn('No se encontraron promociones.');
+            } else {
+                setPromocionesData(result);
+            }
+
+            result = await actions.getOfertas();
+            if (result == null) {
+                console.warn('No se encontraron ofertas.');
+            } else {
+                setOfertasData(result);
+            }
+
+            result = await actions.getProductos();
+            if (result == null) {
+                console.warn('No se encontraron productos.');
+            } else {
+                setProductosData(result);
+            }
+        })();
+    }, []);
 
     const renderItem = ({ item }) => (
         <TouchableOpacity
@@ -155,7 +70,7 @@ export default function HomeScreen({ navigation }) {
         <View style={{ marginRight: 20, backgroundColor: '#DDDDDD', padding: 10, borderRadius: 12 }}>
             <View style={{ width: 120, height: 90, alignItems: 'center', }}>
                 <Image
-                    source={image}
+                    source={{ uri: item.imagen != '' ? `${REST_BASE_IMAGES}${item.imagen}` : `${REST_BASE_IMAGES}${NO_IMAGE}` }}
                     style={{
                         width: 90,
                         height: 90,
@@ -184,7 +99,7 @@ export default function HomeScreen({ navigation }) {
             <View style={{ marginVertical: 8, marginStart: 10, marginEnd: 10, flexDirection: 'row' }}>
                 <View style={{ alignItems: 'center', paddingStart: 6, paddingEnd: 8 }}>
                     <Image
-                        source={image}
+                        source={{ uri: item.imagenDetalle != '' ? `${REST_BASE_IMAGES}${item.imagenDetalle}` : `${REST_BASE_IMAGES}${NO_IMAGE}` }}
                         style={{
                             width: 70,
                             height: 70,
@@ -218,22 +133,28 @@ export default function HomeScreen({ navigation }) {
 
     return (
         <FlatList
-            data={PRODUCTOS}
+            data={productosData}
             ListHeaderComponent={
                 <>
                     <Text style={{ fontSize: 23 }}>Promociones</Text>
                     <FlatList
-                        data={DATA}
+                        data={promocionesData}
                         renderItem={renderItem}
                         horizontal={true}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => `${item.id}`}
+                        ListEmptyComponent={
+                            <Text>No se encontraron promociones.</Text>
+                        }
                     />
                     <Text style={{ fontSize: 23 }}>Ofertas</Text>
                     <FlatList
-                        data={DATA_OFERTAS}
+                        data={ofertasData}
                         renderItem={renderItemOfertas}
                         horizontal={true}
                         keyExtractor={item => `${item.id}`}
+                        ListEmptyComponent={
+                            <Text>No se encontraron ofertas.</Text>
+                        }
                     />
                     <Text style={{ fontSize: 23 }}>Productos</Text>
                 </>
@@ -241,6 +162,9 @@ export default function HomeScreen({ navigation }) {
             renderItem={renderItemProductos}
             horizontal={false}
             keyExtractor={item => `${item.idRubro}`}
+            ListEmptyComponent={
+                <Text>No se encontraron productos.</Text>
+            }
         />
     );
 }
