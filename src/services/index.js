@@ -25,24 +25,27 @@ export const signUp = async (usuario, clave, nombre, apellido) => Service('/sign
     }
 });
 
-export const obtenerPromociones = async () => Service('/actions.php', {
+export const obtenerPromociones = async (user) => Service('/actions.php', {
     method: 'GET',
     params: {
-        do: 'getPromociones'
+        do: 'getPromociones',
+        user: user
     }
 });
 
-export const obtenerOfertas = async () => Service('/actions.php', {
+export const obtenerOfertas = async (user) => Service('/actions.php', {
     method: 'GET',
     params: {
-        do: 'getDestacados'
+        do: 'getDestacados',
+        user: user
     }
 });
 
-export const obtenerProductos = async () => Service('/actions.php', {
+export const obtenerProductos = async (user) => Service('/actions.php', {
     method: 'GET',
     params: {
-        do: 'getProductos'
+        do: 'getProductos',
+        user: user
     }
 });
 
@@ -60,6 +63,14 @@ export const removeFavorito = async (id, user) => Service('/actions.php', {
     params: {
         do: 'removeFavorito',
         id: id,
+        user: user
+    }
+});
+
+export const obtenerFavoritos = async (user) => Service('/actions.php', {
+    method: 'GET',
+    params: {
+        do: 'getFavoritos',
         user: user
     }
 });

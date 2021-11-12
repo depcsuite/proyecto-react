@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
             // await AsyncStorage.removeItem('@isLoggedIn');
             let keys = ['@isLoggedIn', '@id', '@usuario', '@nombre', '@apellido'];
             await AsyncStorage.multiRemove(keys);
+            setCarrito([]);
         } catch (error) {
             console.warn(error);
         }
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }) => {
 
     const getPromociones = async () => {
         try {
-            const result = await Service.obtenerPromociones();
+            const result = await Service.obtenerPromociones(userData.usuario);
             if (result.status == 200) {
                 const { data } = result;
                 if (data.code == 200) {
@@ -81,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
     const getOfertas = async () => {
         try {
-            const result = await Service.obtenerOfertas();
+            const result = await Service.obtenerOfertas(userData.usuario);
             if (result.status == 200) {
                 const { data } = result;
                 if (data.code == 200) {
@@ -96,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 
     const getProductos = async () => {
         try {
-            const result = await Service.obtenerProductos();
+            const result = await Service.obtenerProductos(userData.usuario);
             if (result.status == 200) {
                 const { data } = result;
                 if (data.code == 200) {
@@ -157,6 +158,17 @@ export const AuthProvider = ({ children }) => {
         return null;
     }
 
+    const getFavoritos = async () => {
+        const result = await Service.obtenerFavoritos(userData.usuario);
+        if (result.status == 200) {
+            const { data } = result;
+            if (data.code == 200) {
+                return data.body.favoritos;
+            }
+        }
+        return null;
+    }
+
     const registrarPedido = () => {
         // console.log(carrito);
     }
@@ -207,7 +219,8 @@ export const AuthProvider = ({ children }) => {
                     getOfertas,
                     getProductos,
                     agregarFavorito,
-                    eliminarFavorito
+                    eliminarFavorito,
+                    getFavoritos
                 }
             }}
         >
