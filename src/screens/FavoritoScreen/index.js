@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, Image, Text, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Image, RefreshControl, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { NO_IMAGE, REST_BASE_IMAGES } from '../../config/constants';
 import { AuthContext } from '../../navigation/AuthProvider';
@@ -11,17 +11,17 @@ export default function FavoritoScreen({ navigation, route }) {
     const { isLoggedIn } = user;
 
     const [loading, setLoading] = useState(true);
+    const [refresh, setRefresh] = useState(true);
     const [dataFavoritos, setDataFavoritos] = useState([]);
 
     useEffect(() => {
         (async () => {
             setLoading(true);
             const result = await actions.getFavoritos();
-            if (result != null)
-                setDataFavoritos(result);
+            setDataFavoritos(result);
             setLoading(false);
         })();
-    }, []);
+    }, [refresh]);
 
     function textTransform(text) {
         if (text.length >= 28) {
@@ -60,6 +60,10 @@ export default function FavoritoScreen({ navigation, route }) {
         );
     }
 
+    const handleRefresh = () => {
+        setRefresh(prevValue => !prevValue);
+    }
+
     if (!isLoggedIn) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -79,15 +83,16 @@ export default function FavoritoScreen({ navigation, route }) {
                 <FlatList
                     data={dataFavoritos}
                     ListEmptyComponent={
-                        <Text>No se han encontrado favoritos.</Text>
+                        <Text style={{ textAlign: 'center' }}>No se han encontrado favoritos.</Text>
                     }
                     horizontal={false}
                     keyExtractor={item => `${item.id}`}
                     renderItem={renderItem}
                     style={{
-                        marginTop: 20,
-                        backgroundColor: 'white'
+                        paddingTop: 20,
+                        backgroundColor: 'white',
                     }}
+                    refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
                 />
             );
         }

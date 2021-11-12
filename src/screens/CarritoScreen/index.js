@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, FlatList, Dimensions, Button } from 'react-native';
+import { Text, View, FlatList, Dimensions, Button, RefreshControl } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../../navigation/AuthProvider';
 
@@ -9,13 +9,18 @@ export default function CarritoScreen() {
 
     const [total, setTotal] = useState(0);
 
+    const [loading, setLoading] = useState(false);
+    const [refresh, setRefresh] = useState(true);
+
     useEffect(() => {
+        setLoading(true);
         let cant = 0;
         data.carrito.forEach(function (item) {
             cant += item.total;
         });
         setTotal(cant);
-    }, [data.carrito]);
+        setLoading(false);
+    }, [data.carrito, refresh]);
 
     const renderItem = ({ item }) => {
         return (
@@ -34,6 +39,10 @@ export default function CarritoScreen() {
                 />
             </View>
         );
+    }
+
+    const handleRefresh = () => {
+        setRefresh(prevValue => !prevValue);
     }
 
     return (
@@ -65,6 +74,7 @@ export default function CarritoScreen() {
                 backgroundColor: 'white',
                 paddingTop: 20
             }}
+            refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
         />
     );
 }

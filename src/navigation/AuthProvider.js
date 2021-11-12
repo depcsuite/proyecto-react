@@ -97,6 +97,7 @@ export const AuthProvider = ({ children }) => {
 
     const getProductos = async () => {
         try {
+            console.log(userData.usuario);
             const result = await Service.obtenerProductos(userData.usuario);
             if (result.status == 200) {
                 const { data } = result;
@@ -166,7 +167,7 @@ export const AuthProvider = ({ children }) => {
                 return data.body.favoritos;
             }
         }
-        return null;
+        return [];
     }
 
     const registrarPedido = () => {

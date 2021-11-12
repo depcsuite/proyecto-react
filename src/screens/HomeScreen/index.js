@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import { AuthContext } from '../../navigation/AuthProvider';
 import style from './styles';
 
@@ -15,6 +15,7 @@ export default function HomeScreen({ navigation }) {
     const [promocionesData, setPromocionesData] = useState(null);
     const [ofertasData, setOfertasData] = useState(null);
     const [productosData, setProductosData] = useState(null);
+    const [refresh, setRefresh] = useState(false);
 
     const MAX_HEIGHT_ITEM = Dimensions.get('screen').height / 7.5;
 
@@ -43,7 +44,7 @@ export default function HomeScreen({ navigation }) {
             }
             setLoading(false);
         })();
-    }, []);
+    }, [refresh]);
 
     const renderItem = ({ item }) => (
         <TouchableOpacity
@@ -134,6 +135,10 @@ export default function HomeScreen({ navigation }) {
         );
     }
 
+    const handleRefresh = () => {
+        setRefresh(prevValue => !prevValue);
+    }
+
     if (loading) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -175,6 +180,7 @@ export default function HomeScreen({ navigation }) {
                 ListEmptyComponent={
                     <Text>No se encontraron productos.</Text>
                 }
+                refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
             />
         );
     }

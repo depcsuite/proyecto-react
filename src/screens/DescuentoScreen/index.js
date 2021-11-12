@@ -20,6 +20,7 @@ export default function DescuentoScreen({ navigation, route: { params }, route }
     const [favorito, setFavorito] = useState(false);
 
     useEffect(() => {
+        setFavorito(item.favorito);
         data.carrito.forEach(function (value) {
             if (value.id == item.id) {
                 setCantPedido(parseInt(value.cantidad));
