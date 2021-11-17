@@ -1,21 +1,20 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const style = StyleSheet.create({
     personContainer: {
-        paddingVertical: 50,
-        backgroundColor: '#EDEDED'
+        paddingTop: 0,
+        paddingBottom: 30,
+        backgroundColor: 'rgba(0,0,0,0.4)'
     },
     person: {
         backgroundColor: 'white',
-        padding: 27,
+        padding: 20,
         borderRadius: 200,
         alignSelf: 'center',
-        borderColor: '#B2B1B9',
-        borderWidth: 2
     },
     mainContainer: {
-        marginBottom: 50,
-        backgroundColor: '#EDEDED',
+        paddingBottom: 50,
+        backgroundColor: 'rgba(0,0,0,0.4)',
         paddingHorizontal: 20
     },
     containerRow: {
@@ -24,7 +23,19 @@ const style = StyleSheet.create({
     },
     inputRow: {
         width: '49%'
-    }
+    },
+    btnRegistrarse: {
+        backgroundColor: '#E4222C',
+        alignSelf: 'center',
+        paddingVertical: 10,
+        width: Dimensions.get('screen').width - 40,
+        borderRadius: 8
+    },
+    btnRegistroText: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 18
+    },
 });
 
 export default style;

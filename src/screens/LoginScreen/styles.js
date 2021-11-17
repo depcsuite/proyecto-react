@@ -4,14 +4,6 @@ const style = StyleSheet.create({
     container: {
         justifyContent: 'center',
     },
-    input: {
-        backgroundColor: 'white',
-        marginBottom: 0,
-        paddingBottom: 0,
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     inputIconRight: {
         marginEnd: 0,
         width: 50
