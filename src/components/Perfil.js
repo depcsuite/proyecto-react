@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-export default function Perfil({ user }) {
+export default function Perfil({ user, fonts }) {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.containerIcon}>
@@ -14,8 +14,8 @@ export default function Perfil({ user }) {
                 />
             </View>
             <View>
-                <Text style={styles.nombreStyle}>{user.apellido != null && user.apellido != '' ? `${user.nombre} ${user.apellido}` : user.nombre}</Text>
-                <Text style={styles.userStyle}>{user.usuario}</Text>
+                <Text style={[styles.nombreStyle, { fontFamily: fonts[2] }]}>{user.apellido != null && user.apellido != '' ? `${user.nombre} ${user.apellido}` : user.nombre}</Text>
+                <Text style={[styles.userStyle, { fontFamily: fonts[0] }]}>{user.usuario}</Text>
             </View>
         </View>
     );

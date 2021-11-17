@@ -2,12 +2,11 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Dimensions, FlatList, ImageBackground, Text, View, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import { AuthContext } from '../../navigation/AuthProvider';
 import style from './styles';
+import { useFonts } from 'expo-font';
 
 const { REST_BASE_IMAGES, NO_IMAGE } = require('../../config/constants');
 
 export default function HomeScreen({ navigation }) {
-
-    const image = { uri: "https://reactjs.org/logo-og.png" };
 
     const { data, actions } = useContext(AuthContext);
 
@@ -18,6 +17,13 @@ export default function HomeScreen({ navigation }) {
     const [refresh, setRefresh] = useState(false);
 
     const MAX_HEIGHT_ITEM = Dimensions.get('screen').height / 7.5;
+
+    const [loaded] = useFonts({
+        MontserratLight: require('../../../assets/fonts/Montserrat-Light.ttf'),
+        MontserratRegular: require('../../../assets/fonts/Montserrat-Regular.ttf'),
+        MontserratMedium: require('../../../assets/fonts/Montserrat-Medium.ttf'),
+        MontserratSemiBold: require('../../../assets/fonts/Montserrat-SemiBold.ttf')
+    });
 
     useEffect(() => {
         (async () => {
@@ -47,24 +53,22 @@ export default function HomeScreen({ navigation }) {
     }, [refresh]);
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity
-            onPress={() => { navigation.navigate('DescuentoStackNavigator', { item: item }); }}
-        >
+        <TouchableOpacity>
             <ImageBackground
-                source={image}
+                source={{ uri: item.imagen != '' ? `${REST_BASE_IMAGES}${item.imagen}` : `${REST_BASE_IMAGES}${NO_IMAGE}` }}
                 resizeMode={'cover'}
                 style={{
-                    width: Dimensions.get('screen').width / 3,
-                    height: MAX_HEIGHT_ITEM,
+                    width: Dimensions.get('screen').width / 2,
+                    height: MAX_HEIGHT_ITEM + 35,
                     marginEnd: 20,
                     justifyContent: 'flex-end'
                 }}
             >
                 <View
-                    style={{ backgroundColor: 'rgba(78,78,78,0.5)' }}
+                    style={{ backgroundColor: 'rgba(228,34,44,0.7)', padding: 5 }}
                 >
-                    <Text style={{ color: 'white', width: '100%' }}>{item.title}</Text>
-                    <Text style={{ color: 'white', width: '100%' }}>{item.aclaracion}</Text>
+                    <Text style={{ color: 'white', width: '100%', fontSize: 15, fontFamily: 'MontserratRegular' }}>{item.title}</Text>
+                    <Text style={{ color: 'white', width: '100%', fontSize: 13, fontFamily: 'MontserratLight' }}>{item.aclaracion}</Text>
                 </View>
             </ImageBackground>
         </TouchableOpacity>
@@ -84,12 +88,12 @@ export default function HomeScreen({ navigation }) {
                 />
             </View>
             <View style={{ marginTop: 6 }}>
-                <Text style={{ textAlign: 'center', fontSize: 21, lineHeight: 28 }}>{item.nombre}</Text>
-                <Text style={{ textAlign: 'center', fontSize: 17, lineHeight: 22.5 }}>{item.aclaracion}</Text>
+                <Text style={{ textAlign: 'center', fontSize: 21, lineHeight: 28, fontFamily: 'MontserratMedium' }}>{item.nombre}</Text>
+                <Text style={{ textAlign: 'center', fontSize: 17, lineHeight: 22.5, fontFamily: 'MontserratRegular' }}>{item.aclaracion}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: item.precioOferta != null ? 'space-between' : 'center', paddingHorizontal: 8, marginTop: 5 }}>
-                    <Text style={{ textDecorationLine: item.precioOferta != null ? 'line-through' : 'none', fontSize: item.precioOferta != null ? 15 : 18, alignSelf: 'center' }}>{`$ ${item.precioProducto}`}</Text>
+                    <Text style={{ textDecorationLine: item.precioOferta != null ? 'line-through' : 'none', fontSize: item.precioOferta != null ? 15 : 18, alignSelf: 'center', fontFamily: item.precioOferta != null ? 'MontserratLight' : 'MontserratRegular' }}>{`$ ${item.precioProducto}`}</Text>
                     {item.precioOferta != null ?
-                        <Text style={{ fontSize: 18, alignSelf: 'center' }}>{`$ ${item.precioOferta}`}</Text>
+                        <Text style={{ fontSize: 18, alignSelf: 'center', fontFamily: 'MontserratRegular' }}>{`$ ${item.precioOferta}`}</Text>
                         :
                         <></>
                     }
@@ -113,9 +117,9 @@ export default function HomeScreen({ navigation }) {
                     />
                 </View>
                 <View style={{ flexDirection: 'column', flex: 1, justifyContent: 'center', borderStartWidth: 2, borderColor: 'black', paddingStart: 8 }}>
-                    <Text style={{ color: 'black', fontSize: 19 }}>{item.nombre}</Text>
-                    <Text style={{ color: 'black', fontSize: 17 }}>{item.descripcion}</Text>
-                    <Text style={{ color: 'black', fontSize: 15 }}>{`$ ${item.precio}`}</Text>
+                    <Text style={{ color: 'black', fontSize: 17, fontFamily: 'MontserratMedium' }}>{item.nombre}</Text>
+                    <Text style={{ color: 'black', fontSize: 16, fontFamily: 'MontserratRegular' }}>{item.descripcion}</Text>
+                    <Text style={{ color: 'black', fontSize: 16, fontFamily: 'MontserratLight' }}>{`$ ${item.precio}`}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -123,8 +127,8 @@ export default function HomeScreen({ navigation }) {
 
     const renderItemProductos = ({ item }) => {
         return (
-            <View>
-                <Text style={{ fontSize: 21 }}>{item.rubro}</Text>
+            <View style={{ marginBottom: 0 }}>
+                <Text style={{ fontSize: 18, fontFamily: 'MontserratRegular' }}>{item.rubro}</Text>
                 <FlatList
                     data={item.productos}
                     renderItem={renderItemProducto}
@@ -139,7 +143,7 @@ export default function HomeScreen({ navigation }) {
         setRefresh(prevValue => !prevValue);
     }
 
-    if (loading) {
+    if (loading || !loaded) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
                 <ActivityIndicator size={'large'} color={'black'} />
@@ -147,41 +151,46 @@ export default function HomeScreen({ navigation }) {
         );
     } else {
         return (
-            <FlatList
-                data={productosData}
-                ListHeaderComponent={
-                    <>
-                        <Text style={{ fontSize: 23 }}>Promociones</Text>
-                        <FlatList
-                            data={promocionesData}
-                            renderItem={renderItem}
-                            horizontal={true}
-                            keyExtractor={item => `${item.id}`}
-                            ListEmptyComponent={
-                                <Text>No se encontraron promociones.</Text>
-                            }
-                        />
-                        <Text style={{ fontSize: 23 }}>Ofertas</Text>
-                        <FlatList
-                            data={ofertasData}
-                            renderItem={renderItemOfertas}
-                            horizontal={true}
-                            keyExtractor={item => `${item.id}`}
-                            ListEmptyComponent={
-                                <Text>No se encontraron ofertas.</Text>
-                            }
-                        />
-                        <Text style={{ fontSize: 23 }}>Productos</Text>
-                    </>
-                }
-                renderItem={renderItemProductos}
-                horizontal={false}
-                keyExtractor={item => `${item.idRubro}`}
-                ListEmptyComponent={
-                    <Text>No se encontraron productos.</Text>
-                }
-                refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
-            />
+            <View style={{ paddingBottom: 15 }}>
+                <FlatList
+                    data={productosData}
+                    ListHeaderComponent={
+                        <>
+                            <Text style={{ fontSize: 21, paddingTop: 15, paddingBottom: 5, fontFamily: 'MontserratSemiBold' }}>Promociones</Text>
+                            <FlatList
+                                data={promocionesData}
+                                renderItem={renderItem}
+                                horizontal={true}
+                                keyExtractor={item => `${item.id}`}
+                                ListEmptyComponent={
+                                    <Text>No se encontraron promociones.</Text>
+                                }
+                            />
+                            <Text style={{ fontSize: 21, paddingTop: 15, paddingBottom: 5, fontFamily: 'MontserratSemiBold' }}>Ofertas</Text>
+                            <FlatList
+                                data={ofertasData}
+                                renderItem={renderItemOfertas}
+                                horizontal={true}
+                                keyExtractor={item => `${item.id}`}
+                                ListEmptyComponent={
+                                    <Text>No se encontraron ofertas.</Text>
+                                }
+                            />
+                            <Text style={{ fontSize: 21, paddingTop: 15, paddingBottom: 5, fontFamily: 'MontserratSemiBold' }}>Productos</Text>
+                        </>
+                    }
+                    renderItem={renderItemProductos}
+                    horizontal={false}
+                    keyExtractor={item => `${item.idRubro}`}
+                    ListEmptyComponent={
+                        <Text>No se encontraron productos.</Text>
+                    }
+                    refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={loading} />}
+                    style={{
+                        paddingHorizontal: 15,
+                    }}
+                />
+            </View>
         );
     }
 }

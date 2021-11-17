@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Service from '../services';
+import { useFonts } from 'expo-font';
 
 export const AuthContext = createContext({});
 
@@ -14,6 +15,11 @@ export const AuthProvider = ({ children }) => {
     const [promociones, setPromociones] = useState([]);
     const [ofertas, setOfertas] = useState([]);
     const [productos, setProductos] = useState([]);
+    const [fonts, setFonts] = useState([]);
+
+    const [loaded] = useFonts({
+        MontserratRegular: require('../../assets/fonts/Montserrat-Regular.ttf')
+    });
 
     const logIn = async (b) => {
         try {
@@ -97,7 +103,7 @@ export const AuthProvider = ({ children }) => {
 
     const getProductos = async () => {
         try {
-            console.log(userData.usuario);
+            console.log(userData.usuario); //Está tirando undefined la primera vez que se abre la app
             const result = await Service.obtenerProductos(userData.usuario);
             if (result.status == 200) {
                 const { data } = result;
@@ -141,6 +147,7 @@ export const AuthProvider = ({ children }) => {
             }
         });
         setCarrito(carritoAux);
+        return carritoAux;
     }
 
     const agregarFavorito = async (id) => {
@@ -192,6 +199,10 @@ export const AuthProvider = ({ children }) => {
                 console.warn(error);
             }
         })();
+
+        if (loaded) {
+            setFonts(['MontserratRegular']);
+        }
     }, []);
 
     return (
@@ -207,6 +218,7 @@ export const AuthProvider = ({ children }) => {
                     userData
                 },
                 data: {
+                    fonts,
                     carrito,
                     promociones,
                     ofertas,

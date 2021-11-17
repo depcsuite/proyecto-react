@@ -10,7 +10,7 @@ export default function InputCantidad(props) {
 
     return (
         <View style={styles.mainContainer}>
-            <Text style={styles.textUnidades}>Unidades</Text>
+            <Text style={[styles.textUnidades, { fontFamily: props.fonts[0] }]}>Unidades</Text>
             <View style={styles.inputContainer}>
                 <IconButton
                     icon={'minus'}
@@ -25,7 +25,8 @@ export default function InputCantidad(props) {
                     style={{
                         height: 40,
                         color: 'black',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        fontFamily: props.fonts[1]
                     }}
                 />
                 <IconButton

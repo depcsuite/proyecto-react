@@ -3,6 +3,7 @@ import { ActivityIndicator, Button, FlatList, Image, RefreshControl, Text, View 
 import { IconButton } from 'react-native-paper';
 import { NO_IMAGE, REST_BASE_IMAGES } from '../../config/constants';
 import { AuthContext } from '../../navigation/AuthProvider';
+import { useFonts } from 'expo-font';
 
 export default function FavoritoScreen({ navigation, route }) {
 
@@ -13,6 +14,11 @@ export default function FavoritoScreen({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [refresh, setRefresh] = useState(true);
     const [dataFavoritos, setDataFavoritos] = useState([]);
+
+    const [loaded] = useFonts({
+        MontserratMedium: require('../../../assets/fonts/Montserrat-Medium.ttf'),
+        MontserratRegular: require('../../../assets/fonts/Montserrat-Regular.ttf')
+    });
 
     useEffect(() => {
         (async () => {
@@ -41,12 +47,13 @@ export default function FavoritoScreen({ navigation, route }) {
                     source={{ uri: item.imagen_detalle != '' ? `${REST_BASE_IMAGES}${item.imagen_detalle}` : `${REST_BASE_IMAGES}${NO_IMAGE}` }}
                     style={{
                         width: 50,
-                        height: 50
+                        height: 50,
+                        borderRadius: 8
                     }}
                 />
                 <View style={{ flexDirection: 'column', alignSelf: 'center', backgroundColor: 'transparent' }}>
-                    <Text style={{ fontSize: 18, lineHeight: 24 }}>{item.nombre}</Text>
-                    <Text style={{ fontSize: 14, lineHeight: 19 }}>{textTransform(item.descr)}</Text>
+                    <Text style={{ fontSize: 16, lineHeight: 22, fontFamily: 'MontserratMedium' }}>{item.nombre}</Text>
+                    <Text style={{ fontSize: 13, lineHeight: 17, fontFamily: 'MontserratRegular' }}>{textTransform(item.descr)}</Text>
                 </View>
                 <IconButton
                     icon={'heart'}
@@ -72,7 +79,7 @@ export default function FavoritoScreen({ navigation, route }) {
             </View>
         );
     } else {
-        if (loading) {
+        if (loading || !loaded) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                     <ActivityIndicator size={'large'} color={'#000'} />

@@ -31,19 +31,26 @@ export default function CarritoScreen({ navigation }) {
                     size={25}
                     color={'#000'}
                     onPress={() => {
-                        actions.removeCarrito(item.id);
+                        let carrito = actions.removeCarrito(item.id);
+                        retrieve(carrito);
                     }}
                 />
             </View>
         );
     }
 
-    const retrieve = () => {
+    const retrieve = (carrito = null) => {
         setLoading(true);
         let cant = 0;
-        data.carrito.forEach(function (item) {
-            cant += item.total;
-        });
+        if (carrito == null) {
+            data.carrito.forEach(function (item) {
+                cant += item.total;
+            });
+        } else {
+            carrito.forEach(function (item) {
+                cant += item.total;
+            });
+        }
         setTotal(cant);
         setLoading(false);
     }
@@ -67,7 +74,7 @@ export default function CarritoScreen({ navigation }) {
                 horizontal={false}
                 ListEmptyComponent={
                     <View style={{ alignItems: 'center' }}>
-                        <Text>No hay productos agregados al carrito.</Text>
+                        <Text style={{ fontFamily: data.fonts[0] }}>No hay productos agregados al carrito.</Text>
                     </View>
                 }
                 ListFooterComponent={
