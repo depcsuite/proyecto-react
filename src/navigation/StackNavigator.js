@@ -12,13 +12,24 @@ import CarritoScreen from '../screens/CarritoScreen';
 import FavoritoScreen from '../screens/FavoritoScreen';
 
 import PerfilScreen from '../screens/PerfilScreen';
+import TerminosScreen from '../screens/TerminosScreen';
 // =====================
 
 const Stack = createStackNavigator();
 
 function MainStackNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='HomeStackNavigator'>
+        <Stack.Navigator
+            initialRouteName='HomeStackNavigator'
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#E4222C'
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+            }}
+        >
             <Stack.Screen
                 name='HomeStackNavigator'
                 component={HomeScreen}
@@ -27,7 +38,7 @@ function MainStackNavigator({ navigation }) {
                         <IconButton
                             onPress={() => navigation.openDrawer()}
                             icon="menu"
-                            color={'#000'}
+                            color={'white'}
                         />
                     ),
                     title: 'MiAPP - Home'
@@ -40,13 +51,30 @@ function MainStackNavigator({ navigation }) {
                     title: 'MiAPP - Descuentos'
                 }}
             />
+            <Stack.Screen
+                name='TerminosStackNavigator'
+                component={TerminosScreen}
+                options={{
+                    title: 'Términos y condiciones'
+                }}
+            />
         </Stack.Navigator>
     );
 }
 
 function CarritoStackNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='CarritoStackNavigator'>
+        <Stack.Navigator
+            initialRouteName='CarritoStackNavigator'
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#E4222C'
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+            }}
+        >
             <Stack.Screen
                 name='CarritoStackNavigator'
                 component={CarritoScreen}
@@ -55,10 +83,10 @@ function CarritoStackNavigator({ navigation }) {
                         <IconButton
                             onPress={() => navigation.openDrawer()}
                             icon="menu"
-                            color={'#000'}
+                            color={'white'}
                         />
                     ),
-                    title: 'MiAPP - Carrito'
+                    title: 'MiAPP - Carrito',
                 }}
             />
         </Stack.Navigator>
@@ -67,7 +95,17 @@ function CarritoStackNavigator({ navigation }) {
 
 function FavoritoStackNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='FavoritoStackNavigator'>
+        <Stack.Navigator
+            initialRouteName='FavoritoStackNavigator'
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#E4222C'
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+            }}
+        >
             <Stack.Screen
                 name='FavoritoStackNavigator'
                 component={FavoritoScreen}
@@ -76,7 +114,7 @@ function FavoritoStackNavigator({ navigation }) {
                         <IconButton
                             onPress={() => navigation.openDrawer()}
                             icon="menu"
-                            color={'#000'}
+                            color={'white'}
                         />
                     ),
                     title: 'MiAPP - Favoritos'
@@ -88,7 +126,17 @@ function FavoritoStackNavigator({ navigation }) {
 
 function PerfilStackNavigator({ navigation }) {
     return (
-        <Stack.Navigator initialRouteName='PerfilStackNavigator'>
+        <Stack.Navigator
+            initialRouteName='PerfilStackNavigator'
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: '#E4222C'
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+            }}
+        >
             <Stack.Screen
                 name='PerfilStackNavigator'
                 component={PerfilScreen}
@@ -97,7 +145,7 @@ function PerfilStackNavigator({ navigation }) {
                         <IconButton
                             onPress={() => navigation.openDrawer()}
                             icon="menu"
-                            color={'#000'}
+                            color={'white'}
                         />
                     ),
                     title: 'MiAPP - Perfil'

@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 
 export default function FavoritoScreen({ navigation, route }) {
 
-    const { auth, user, actions } = useContext(AuthContext);
+    const { auth, user, actions, data } = useContext(AuthContext);
 
     const { isLoggedIn } = user;
 
@@ -16,8 +16,7 @@ export default function FavoritoScreen({ navigation, route }) {
     const [dataFavoritos, setDataFavoritos] = useState([]);
 
     const [loaded] = useFonts({
-        MontserratMedium: require('../../../assets/fonts/Montserrat-Medium.ttf'),
-        MontserratRegular: require('../../../assets/fonts/Montserrat-Regular.ttf')
+        MontserratMedium: require('../../../assets/fonts/Montserrat-Medium.ttf')
     });
 
     useEffect(() => {
@@ -37,7 +36,10 @@ export default function FavoritoScreen({ navigation, route }) {
     }
 
     const handleFavorito = async (item) => {
-        console.log(item.id);
+        const result = await actions.eliminarFavorito(item.id);
+        if (result != null) {
+            setRefresh(prevValue => !prevValue);
+        }
     }
 
     const renderItem = ({ item }) => {
@@ -53,7 +55,7 @@ export default function FavoritoScreen({ navigation, route }) {
                 />
                 <View style={{ flexDirection: 'column', alignSelf: 'center', backgroundColor: 'transparent' }}>
                     <Text style={{ fontSize: 16, lineHeight: 22, fontFamily: 'MontserratMedium' }}>{item.nombre}</Text>
-                    <Text style={{ fontSize: 13, lineHeight: 17, fontFamily: 'MontserratRegular' }}>{textTransform(item.descr)}</Text>
+                    <Text style={{ fontSize: 13, lineHeight: 17, fontFamily: data.fonts[0] }}>{textTransform(item.descr)}</Text>
                 </View>
                 <IconButton
                     icon={'heart'}

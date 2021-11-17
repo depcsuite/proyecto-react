@@ -18,7 +18,8 @@ export const AuthProvider = ({ children }) => {
     const [fonts, setFonts] = useState([]);
 
     const [loaded] = useFonts({
-        MontserratRegular: require('../../assets/fonts/Montserrat-Regular.ttf')
+        MontserratRegular: require('../../assets/fonts/Montserrat-Regular.ttf'),
+        MontserratSemiBold: require('../../assets/fonts/Montserrat-SemiBold.ttf'),
     });
 
     const logIn = async (b) => {
@@ -201,7 +202,7 @@ export const AuthProvider = ({ children }) => {
         })();
 
         if (loaded) {
-            setFonts(['MontserratRegular']);
+            setFonts(['MontserratRegular', 'MontserratSemiBold']);
         }
     }, []);
 
