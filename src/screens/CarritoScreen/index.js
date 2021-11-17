@@ -74,7 +74,7 @@ export default function CarritoScreen({ navigation }) {
                 horizontal={false}
                 ListEmptyComponent={
                     <View style={{ alignItems: 'center' }}>
-                        <Text style={{ fontFamily: data.fonts[0] }}>No hay productos agregados al carrito.</Text>
+                        <Text style={{ fontFamily: data.fonts[0], fontSize: 20 }}>No hay productos agregados al carrito.</Text>
                     </View>
                 }
                 ListFooterComponent={

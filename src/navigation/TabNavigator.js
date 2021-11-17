@@ -7,7 +7,7 @@ import { MainStackNavigator, CarritoStackNavigator, FavoritoStackNavigator, Perf
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator() {
+export default function TabNavigator({ navigation }) {
 
     return (
         <Tab.Navigator
@@ -28,6 +28,11 @@ export default function TabNavigator() {
                     }),
                     tabBarActiveTintColor: '#1C3738',
                     tabBarInactiveTintColor: '#9D9D9D'
+                }}
+                listeners={{
+                    tabPress: e => {
+                        navigation.navigate('Home', { screen: 'HomeStackNavigator' });
+                    }
                 }}
             />
             <Tab.Screen
