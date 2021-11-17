@@ -12,8 +12,8 @@ export default function AuthStack({ route, navigation }) {
         <Stack.Navigator
             initialRouteName='AuthStackLoginScreen'
         >
-            <Stack.Screen name='AuthStackLoginScreen' component={LoginScreen} />
-            <Stack.Screen name='AuthStackSignUpScreen' component={SignUpScreen} options={{ title: 'Registro', headerTitleAlign: 'center' }} />
+            <Stack.Screen name='AuthStackLoginScreen' component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='AuthStackSignUpScreen' component={SignUpScreen} options={{ title: '', headerTitleAlign: 'center' }} />
         </Stack.Navigator>
     );
 }
