@@ -74,7 +74,7 @@ export default function CarritoScreen({ navigation }) {
                 horizontal={false}
                 ListEmptyComponent={
                     <View style={{ alignItems: 'center' }}>
-                        <Text style={{ fontFamily: data.fonts[0], fontSize: 20 }}>No hay productos agregados al carrito.</Text>
+                        <Text style={{ fontFamily: data.fonts[0], fontSize: 17 }}>No hay productos agregados al carrito.</Text>
                     </View>
                 }
                 ListFooterComponent={
@@ -84,9 +84,9 @@ export default function CarritoScreen({ navigation }) {
                         <View style={{ width: Dimensions.get('screen').width, alignItems: 'center' }}>
                             <Text style={{ marginVertical: 20, fontSize: 17 }}>Total {total}</Text>
                             <Button
-                                title={'Registrar pedido'}
+                                title={'Confirmar pedido'}
                                 onPress={() => {
-                                    actions.registrarPedido();
+                                    navigation.navigate('CarritoConfirmacionStackNavigator', { total: total });
                                 }}
                             />
                         </View>

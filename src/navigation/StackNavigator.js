@@ -13,6 +13,7 @@ import FavoritoScreen from '../screens/FavoritoScreen';
 
 import PerfilScreen from '../screens/PerfilScreen';
 import TerminosScreen from '../screens/TerminosScreen';
+import CarritoConfirmScreen from '../screens/ConfirmacionScreen';
 // =====================
 
 const Stack = createStackNavigator();
@@ -87,6 +88,20 @@ function CarritoStackNavigator({ navigation }) {
                         />
                     ),
                     title: 'MiAPP - Carrito',
+                }}
+            />
+            <Stack.Screen
+                name='CarritoConfirmacionStackNavigator'
+                component={CarritoConfirmScreen}
+                options={{
+                    headerLeft: () => (
+                        <IconButton
+                            onPress={() => navigation.goBack()}
+                            icon="arrow-left"
+                            color={'white'}
+                        />
+                    ),
+                    title: 'MiAPP - Confirmación',
                 }}
             />
         </Stack.Navigator>

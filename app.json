@@ -4,11 +4,11 @@
     "slug": "israpp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_menu.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e4222c"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,13 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/app_menu.png",
+      "bundleIdentifier": "com.appcirca",
+      "buildNumber": "3.5.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#e4222c"
+      },
+      "package": "com.appcirca",
+      "icon": "./assets/app_menu.png",
+      "versionCode": 35
     },
     "web": {
       "favicon": "./assets/favicon.png"

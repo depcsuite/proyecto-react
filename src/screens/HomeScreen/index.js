@@ -8,7 +8,7 @@ const { REST_BASE_IMAGES, NO_IMAGE } = require('../../config/constants');
 
 export default function HomeScreen({ navigation }) {
 
-    const { data, actions } = useContext(AuthContext);
+    const { data, actions, user } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(true);
     const [promocionesData, setPromocionesData] = useState(null);
@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
             }
             setLoading(false);
         })();
-    }, [refresh]);
+    }, [refresh, user.userData.usuario]);
 
     const renderItem = ({ item }) => (
         <TouchableOpacity>

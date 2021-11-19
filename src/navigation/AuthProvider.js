@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }) => {
             let keys = ['@isLoggedIn', '@id', '@usuario', '@nombre', '@apellido'];
             await AsyncStorage.multiRemove(keys);
             setCarrito([]);
+            setUserData({});
         } catch (error) {
             console.warn(error);
         }
@@ -179,7 +180,8 @@ export const AuthProvider = ({ children }) => {
     }
 
     const registrarPedido = () => {
-        // console.log(carrito);
+        setCarrito([]);
+        return Math.random(0, 1000);
     }
 
     useEffect(() => {

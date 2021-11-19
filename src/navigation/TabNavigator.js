@@ -46,6 +46,11 @@ export default function TabNavigator({ navigation }) {
                     tabBarActiveTintColor: '#1C3738',
                     tabBarInactiveTintColor: '#9D9D9D'
                 }}
+                listeners={{
+                    tabPress: e => {
+                        navigation.navigate('Carrito', { screen: 'CarritoStackNavigator' });
+                    }
+                }}
             />
             <Tab.Screen
                 name='Favoritos'
